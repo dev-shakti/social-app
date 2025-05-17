@@ -1,5 +1,5 @@
 import "./navbar.scss";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -8,31 +8,39 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
+import { useContext } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
 
 const Navbar = () => {
+  const { toggleTheme, darkMode } = useContext(ThemeContext);
+
   return (
     <header className="header">
       <div className="left">
-        <Link to="/" style={{textDecoration:"none"}}>
-           <span>lamasocial</span>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <span>lamasocial</span>
         </Link>
-      
+
         <div className="icons">
-          <HomeOutlinedIcon className="icon"/>
-          <DarkModeOutlinedIcon className="icon"/>
-          <GridViewOutlinedIcon className="icon"/>
+          <HomeOutlinedIcon />
+          {darkMode ? (
+            <WbSunnyOutlinedIcon fontSize="small"  onClick={toggleTheme} />
+          ) : (
+            <DarkModeOutlinedIcon fontSize="small"  onClick={toggleTheme} />
+          )}
+
+          <GridViewOutlinedIcon fontSize="small" />
         </div>
         <div className="searchContainer">
-          <SearchOutlinedIcon className="icon"/>
+          <SearchOutlinedIcon fontSize="small" />
           <input type="text" placeholder="Search post or videos..." />
         </div>
       </div>
       <div className="right">
         <div className="icons">
-          <PersonOutlinedIcon className="icon"/>
-          <EmailOutlinedIcon className="icon"/>
-          <NotificationsOutlinedIcon className="icon"/>
+          <PersonOutlinedIcon  fontSize="small"/>
+          <EmailOutlinedIcon fontSize="small"/>
+          <NotificationsOutlinedIcon fontSize="small" />
         </div>
         <div className="user">
           <img
