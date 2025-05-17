@@ -8,7 +8,7 @@ const RightBar = () => {
         <div className="item">
           <span>Suggestions For You</span>
 
-            {/* user1 */}
+          {/* user1 */}
           <div className="user">
             <div className="userInfo">
               <img
@@ -24,7 +24,7 @@ const RightBar = () => {
           </div>
 
           {/* user2 */}
-               <div className="user">
+          <div className="user">
             <div className="userInfo">
               <img
                 src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
@@ -41,31 +41,80 @@ const RightBar = () => {
 
         {/* item 2 */}
 
-          <div className="item">
+        <div className="item">
           <span>Latest Activities</span>
-          
-            {/* user1 */}
+
+          {/* user1 */}
           <div className="user">
             <div className="userInfo">
               <img
                 src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 alt=""
               />
-                <p>Jane Doe <span>liked the post</span> </p>
+              <p>
+                Jane Doe <span>liked the post</span>{" "}
+              </p>
             </div>
-             <span>5 mins ago</span>
+            <span>5 mins ago</span>
           </div>
 
           {/* user2 */}
-               <div className="user">
+          <div className="user">
             <div className="userInfo">
               <img
                 src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
                 alt=""
               />
-              <p>Jane Doe <span>liked the post</span> </p>
+              <p>
+                Jane Doe <span>liked the post</span>{" "}
+              </p>
             </div>
-          <span>1 min ago</span>
+            <span>1 min ago</span>
+          </div>
+        </div>
+
+        {/* item 3 */}
+        <div className="item">
+          <span>Online friends</span>
+          <div className="user">
+            <div className="userInfo">
+              <img
+                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                alt=""
+              />
+              <div className="dot"></div>
+              <span>Jane Doe</span>
+            </div>
+          </div>
+            <div className="user">
+            <div className="userInfo">
+              <img
+                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                alt=""
+              />
+              <div className="dot"></div>
+              <span>Jane Doe</span>
+            </div>
+          </div>
+            <div className="user">
+            <div className="userInfo">
+              <img
+                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                alt=""
+              />
+              <div className="dot"></div>
+              <span>Jane Doe</span>
+            </div>
+          </div>
+            <div className="user">
+            <div className="userInfo">
+              <img
+                src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+                alt=""
+              />
+              <div className="dot"></div>
+              <span>Jane Doe</span>
+            </div>
           </div>
         </div>
       </div>

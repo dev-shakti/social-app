@@ -35,6 +35,17 @@
           display: flex;
           align-items: center;
           gap: 10px;
+          position: relative;
+
+          .dot{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: limegreen;
+            position: absolute;
+            left: 23px;
+            top: 0;
+          }
 
           img {
             width: 30px;
