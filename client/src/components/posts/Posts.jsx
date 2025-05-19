@@ -1,35 +1,37 @@
+import axios from "axios";
 import AddPost from "../addPost/AddPost";
 import Post from "../post/Post";
 import "./posts.scss";
+import { useQuery } from "@tanstack/react-query";
 
-const posts = [
-  {
-    id: 1,
-    name: "John Doe",
-    userId: 1,
-    profilePic:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
-    img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-    userId: 2,
-    profilePic:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    desc: "Tenetur iste voluptates dolorem rem commodi voluptate pariatur, voluptatum, laboriosam consequatur enim nostrum cumque! Maiores a nam non adipisci minima modi tempore.",
-    img: "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-];
 
+async function fetchPosts() {
+  try {
+    const response = await axios.get(`http://localhost:5000/api/posts/get`, {
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 const Posts = () => {
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["posts"],
+    queryFn: fetchPosts,
+  });
+  console.log(data);
+
+  if (isPending) return <p>Loading....</p>;
+  if (isError) return <p>{error.message}</p>;
+
   return (
     <div className="posts">
-      <AddPost/>
-      {posts.map((post) => (
-        <Post key={post.id} post={post} />
-      ))}
+      <AddPost />
+      {data && data.posts && data.posts.length > 0
+        ? data.posts.map((post) => <Post key={post._id} post={post} />)
+        : null}
     </div>
   );
 };

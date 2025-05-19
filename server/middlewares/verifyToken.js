@@ -13,7 +13,8 @@ export async function verifyToken(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(process.env.JWT_SECRET, token);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+     
     if (!decoded) {
       return res.status(401).json({
         success: false,
