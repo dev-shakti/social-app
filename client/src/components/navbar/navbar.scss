@@ -1,12 +1,11 @@
 @import "../../styles.scss";
 
 .header {
-
   @include themify($themes) {
     padding: 10px 20px;
     border-bottom: 1px solid themed("border");
-    background-color:themed("bg");
-    color:themed("textColor");
+    background-color: themed("bg");
+    color: themed("textColor");
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -55,6 +54,17 @@
       display: flex;
       align-items: center;
       gap: 30px;
+
+      button {
+        border: none;
+        outline: none;
+        padding: 10px;
+        background-color: themed("blueColor");
+        color: #fff;
+        cursor: pointer;
+        border-radius: 5px;
+        font-weight: 500;
+      }
 
       .icons {
         display: flex;

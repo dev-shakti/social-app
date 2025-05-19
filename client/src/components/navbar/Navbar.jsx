@@ -1,5 +1,5 @@
 import "./navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -10,10 +10,35 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
+import { AuthContext } from "../../context/AuthContent";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { toggleTheme, darkMode } = useContext(ThemeContext);
+  const { setCurrentUser, currentUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
+  async function handleLogout() {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/auth/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      if (response?.data?.success) {
+        localStorage.removeItem("user");
+        setCurrentUser(null);
+        toast.success(response.data.message);
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error(error.message);
+      toast.error(error.response?.data?.message || error.message);
+    }
+  }
   return (
     <header className="header">
       <div className="left">
@@ -24,9 +49,9 @@ const Navbar = () => {
         <div className="icons">
           <HomeOutlinedIcon />
           {darkMode ? (
-            <WbSunnyOutlinedIcon fontSize="small"  onClick={toggleTheme} />
+            <WbSunnyOutlinedIcon fontSize="small" onClick={toggleTheme} />
           ) : (
-            <DarkModeOutlinedIcon fontSize="small"  onClick={toggleTheme} />
+            <DarkModeOutlinedIcon fontSize="small" onClick={toggleTheme} />
           )}
 
           <GridViewOutlinedIcon fontSize="small" />
@@ -38,8 +63,8 @@ const Navbar = () => {
       </div>
       <div className="right">
         <div className="icons">
-          <PersonOutlinedIcon  fontSize="small"/>
-          <EmailOutlinedIcon fontSize="small"/>
+          <PersonOutlinedIcon fontSize="small" />
+          <EmailOutlinedIcon fontSize="small" />
           <NotificationsOutlinedIcon fontSize="small" />
         </div>
         <div className="user">
@@ -47,8 +72,9 @@ const Navbar = () => {
             src="https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600"
             alt=""
           />
-          <span>John Doe</span>
+          <span>{currentUser?.username}</span>
         </div>
+        <button onClick={handleLogout}>Logout</button>
       </div>
     </header>
   );

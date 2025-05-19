@@ -1,6 +1,36 @@
+import { useState } from "react";
 import "./register.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const initialRegisterFormData = {
+  username: "",
+  email: "",
+  password: "",
+};
 const Register = () => {
+  const [formData, setFormData] = useState(initialRegisterFormData);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleRegisterForm(event) {
+    event.preventDefault();
+    
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        `http://localhost:5000/api/auth/register`,
+        formData
+      );
+      if (response?.data?.success) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="register">
       <div className="card">
@@ -19,13 +49,38 @@ const Register = () => {
         </div>
         <div className="right">
           <h2>Create Your Account</h2>
-          <form>
-            <input type="text" placeholder="Username" />
-            <input type="text" placeholder="Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
+          <form onSubmit={handleRegisterForm}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={formData.username}
+              name="username"
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              name="email"
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              name="password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+            />
 
-            <button>Register</button>
+            <button type="submit" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
+            </button>
           </form>
         </div>
       </div>
