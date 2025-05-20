@@ -78,6 +78,9 @@ export async function deletePosts(req, res) {
         .json({ message: "You are not allowed to delete this post" });
     }
 
+    await Post.findByIdAndDelete(id);
+
+
     return res.status(200).json({
       success: true,
       message: "Post deleted successfully",

@@ -36,7 +36,7 @@ async function deletePost(id) {
 const Post = ({ post }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
-  const {currentUser}=useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
 
   const isLiked = false;
 
@@ -66,21 +66,23 @@ const Post = ({ post }) => {
               <span className="date">5 mins ago</span>
             </div>
           </div>
-          <div className="actions">
-           <MoreHorizIcon onClick={() => setShowActions((prev) => !prev)} />
-            {showActions && (
-              <div className="btn-group">
-                <button>
-                  <EditIcon fontSize="small" />
-                  Edit
-                </button>
-                <button onClick={() => mutation.mutate(post._id)}>
-                  <DeleteIcon fontSize="small" />
-                  Delete
-                </button>
-              </div>
-            )}
-          </div>
+          {currentUser?._id === post.userId?._id && (
+            <div className="actions">
+              <MoreHorizIcon onClick={() => setShowActions((prev) => !prev)} />
+              {showActions && (
+                <div className="btn-group">
+                  <button>
+                    <EditIcon fontSize="small" />
+                    Edit
+                  </button>
+                  <button onClick={() => mutation.mutate(post._id)}>
+                    <DeleteIcon fontSize="small" />
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="content">
