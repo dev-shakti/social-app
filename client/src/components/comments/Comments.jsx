@@ -1,45 +1,43 @@
+import axios from "axios";
+import AddCommentForm from "./AddCommentForm";
 import "./comments.scss";
+import { useQuery } from "@tanstack/react-query";
+import Comment from "./Comment";
 
-const comments = [
-  {
-    id: 1,
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-    name: "John Doe",
-    userId: 1,
-    profilePicture:
-      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  },
-  {
-    id: 2,
-    desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-    name: "Jane Doe",
-    userId: 2,
-    profilePicture:
-      "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-  },
-];
+async function fetchComments({ queryKey }) {
+  const [, postId] = queryKey;
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/comments/${postId}/get`,
+      {
+        withCredentials: true,
+      }
+    );
 
-const Comments = () => {
+    return response.data;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+const Comments = ({ postId }) => {
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["comments", postId],
+    queryFn: fetchComments,
+  });
+
+  if (isPending) return <p>Loading....</p>;
+  if (isError) return <p>{error.message}</p>;
+
   return (
     <div className="comments">
-      <div className="write">
-        <img
-          src="https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600"
-          alt=""
-        />
-        <input type="text" placeholder="write a comment" />
-        <button>Send</button>
-      </div>
-      {comments.map((comment) => (
-        <div className="comment" key={comment.id}>
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span className="name">{comment.name}</span>
-            <p className="desc">{comment.desc}</p>
-          </div>
-          <span className="date">1 hour ago</span>
-        </div>
-      ))}
+      <AddCommentForm postId={postId} />
+
+      {data && data.comments && data.comments.length > 0
+        ? data.comments.map((comment) => (
+            <Comment comment={comment} key={comment._id} />
+          ))
+        : null}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import authRoute from "./routes/auth.route.js";
 import postRoute from "./routes/post.route.js";
+import commentRoute from "./routes/comment.route.js";
 dotenv.config();
 
 //initialize app
@@ -27,6 +28,8 @@ app.use(
 //routes
 app.use("/api/auth",authRoute);
 app.use("/api/posts",postRoute);
+app.use("/api/comments",commentRoute);
+
 
 //connect to db
 mongoose

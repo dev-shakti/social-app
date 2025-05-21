@@ -9,7 +9,7 @@ import { useContext, useState } from "react";
 import Comments from "../comments/Comments";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContent";
@@ -33,6 +33,22 @@ async function deletePost(id) {
   }
 }
 
+async function fetchCommentCount(postId) {
+ 
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/comments/${postId}/count`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 const Post = ({ post }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
@@ -48,6 +64,13 @@ const Post = ({ post }) => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
   });
+
+   const { data} = useQuery({
+    queryKey: ["commentCount", post._id],
+    queryFn: () => fetchCommentCount(post._id),
+  });
+
+
 
   return (
     <div className="post">
@@ -110,14 +133,14 @@ const Post = ({ post }) => {
             onClick={() => setIsCommentOpen((prev) => !prev)}
           >
             <TextsmsOutlinedIcon fontSize="small" />
-            12 Comments
+           {data?.count} Comments
           </div>
           <div className="item">
             <ShareOutlinedIcon fontSize="small" />
             Share
           </div>
         </div>
-        {isCommentOpen && <Comments />}
+        {isCommentOpen && <Comments postId={post._id}/>}
       </div>
     </div>
   );

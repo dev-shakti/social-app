@@ -21,7 +21,6 @@ const Posts = () => {
     queryKey: ["posts"],
     queryFn: fetchPosts,
   });
-  console.log(data);
 
   if (isPending) return <p>Loading....</p>;
   if (isError) return <p>{error.message}</p>;

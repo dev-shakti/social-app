@@ -4,17 +4,10 @@
   @include themify($themes) {
     margin-top: 20px;
 
-    .write {
+    .form {
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
-
-      img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
 
       input {
         flex: 1;
