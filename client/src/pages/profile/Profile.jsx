@@ -1,4 +1,4 @@
-import "./profile.scss"
+import "./profile.scss";
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -9,8 +9,47 @@ import LanguageIcon from "@mui/icons-material/Language";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/posts/Posts";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Post from "../../components/post/Post";
+import EditIcon from "@mui/icons-material/Edit";
+import { useState } from "react";
+import UpdateProfileDialog from "../../components/updateProfile/UpdateProfileDialog";
+
+async function fetchPostsByUser(userId) {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/posts/${userId}/get`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data.posts;
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 
 const Profile = () => {
+  const { userId } = useParams();
+  const [dialogOpen,setDialogOpen]=useState(false);
+
+
+  const {
+    data: posts,
+    isPending,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["posts", userId],
+    queryFn: () => fetchPostsByUser(userId),
+  });
+
+  if (isPending) return <p>Loading....</p>;
+  if (isError) return <p>{error.message}</p>;
+
   return (
     <div className="profile">
       <div className="imageContainer">
@@ -37,7 +76,7 @@ const Profile = () => {
             <a href="http://facebook.com">
               <TwitterIcon fontSize="small" />
             </a>
-            <a href="http://facebook.com" >
+            <a href="http://facebook.com">
               <LinkedInIcon fontSize="small" />
             </a>
             <a href="http://facebook.com">
@@ -45,8 +84,8 @@ const Profile = () => {
             </a>
           </div>
           <div className="center">
-             <span>Jane Doe</span>
-             <div className="info">
+            <span>Jane Doe</span>
+            <div className="info">
               <div className="item">
                 <PlaceIcon />
                 <span>USA</span>
@@ -55,18 +94,27 @@ const Profile = () => {
                 <LanguageIcon />
                 <span>lama.dev</span>
               </div>
-             </div>
-             <button>Follow</button>
+            </div>
+            <button>Follow</button>
           </div>
           <div className="right">
             <EmailOutlinedIcon />
-            <MoreVertIcon />
+            <div className="editContainer" onClick={() => setDialogOpen((prev) => !prev)}>
+              <EditIcon fontSize="small"/>
+            </div>
           </div>
         </div>
-        <Posts/>
+        {posts && posts.length > 0
+          ? posts.map((post) => (
+              <div style={{ margin: "20px 0" }}>
+                <Post key={post._id} post={post} />
+              </div>
+            ))
+          : null}
       </div>
+      {dialogOpen && <UpdateProfileDialog/>}
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

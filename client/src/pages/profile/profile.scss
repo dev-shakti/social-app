@@ -96,6 +96,23 @@
           display: flex;
           align-items: center;
           gap: 10px;
+
+          .editContainer{
+            padding: 5px;
+            background-color: themed("bg");
+            color: themed("textColorSoft");
+            border-radius: 50%;
+            height: 30px;
+            width: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+
+            &:hover{
+              background-color: themed("bgSoft");
+            }
+          }
         }
       }
     }

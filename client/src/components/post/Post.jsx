@@ -69,7 +69,6 @@ const Post = ({ post }) => {
     queryFn: () => fetchCommentCount(post._id),
   });
 
-
   return (
     <div className="post">
       <div className="container">
@@ -80,7 +79,7 @@ const Post = ({ post }) => {
               alt="user-profiePic"
             />
             <div className="details">
-              <Link className="link" to={`/profile/${post.userId}`}>
+              <Link className="link" to={`/profile/${post.userId._id}`}>
                 <span className="name">{post?.userId?.username}</span>
               </Link>
 

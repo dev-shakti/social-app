@@ -80,13 +80,32 @@ export async function deletePosts(req, res) {
 
     await Post.findByIdAndDelete(id);
 
-
     return res.status(200).json({
       success: true,
       message: "Post deleted successfully",
     });
   } catch (error) {
     console.error("error while deleting post", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+export async function getPostsByUser(req, res) {
+  const { userId } = req.params;
+  try {
+    const posts = await Post.find({ userId }).populate(
+      "userId",
+      "username profilePic"
+    );
+    return res.status(201).json({
+      success: true,
+      posts,
+    });
+  } catch (error) {
+    console.error("error while getting posts", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
