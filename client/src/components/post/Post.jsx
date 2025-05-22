@@ -1,6 +1,4 @@
 import "./post.scss";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
@@ -13,6 +11,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContent";
+import LikeButton from "../likeButton/LikeButton";
 
 async function deletePost(id) {
   try {
@@ -53,8 +52,7 @@ const Post = ({ post }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const { currentUser } = useContext(AuthContext);
-
-  const isLiked = false;
+  const [isLiked,setIsLiked]=useState(false);
 
   const queryClient = useQueryClient();
 
@@ -65,11 +63,11 @@ const Post = ({ post }) => {
     },
   });
 
+
    const { data} = useQuery({
     queryKey: ["commentCount", post._id],
     queryFn: () => fetchCommentCount(post._id),
   });
-
 
 
   return (
@@ -120,14 +118,7 @@ const Post = ({ post }) => {
         </div>
 
         <div className="interactions">
-          <div className="item">
-            {isLiked ? (
-              <FavoriteOutlinedIcon fontSize="small" />
-            ) : (
-              <FavoriteBorderOutlinedIcon fontSize="small" />
-            )}{" "}
-            7 Likes
-          </div>
+          <LikeButton isLiked={isLiked} postId={post._id} setIsLiked={setIsLiked}/>
           <div
             className="item"
             onClick={() => setIsCommentOpen((prev) => !prev)}

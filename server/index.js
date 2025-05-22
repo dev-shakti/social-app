@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import authRoute from "./routes/auth.route.js";
 import postRoute from "./routes/post.route.js";
 import commentRoute from "./routes/comment.route.js";
+import likeRoute from "./routes/like.route.js";
 dotenv.config();
 
 //initialize app
@@ -29,7 +30,7 @@ app.use(
 app.use("/api/auth",authRoute);
 app.use("/api/posts",postRoute);
 app.use("/api/comments",commentRoute);
-
+app.use("/api/likes",likeRoute);
 
 //connect to db
 mongoose
