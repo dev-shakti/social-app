@@ -34,8 +34,7 @@ async function fetchPostsByUser(userId) {
 
 const Profile = () => {
   const { userId } = useParams();
-  const [dialogOpen,setDialogOpen]=useState(false);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const {
     data: posts,
@@ -99,8 +98,11 @@ const Profile = () => {
           </div>
           <div className="right">
             <EmailOutlinedIcon />
-            <div className="editContainer" onClick={() => setDialogOpen((prev) => !prev)}>
-              <EditIcon fontSize="small"/>
+            <div
+              className="editContainer"
+              onClick={() => setDialogOpen((prev) => !prev)}
+            >
+              <EditIcon fontSize="small" />
             </div>
           </div>
         </div>
@@ -112,7 +114,7 @@ const Profile = () => {
             ))
           : null}
       </div>
-      {dialogOpen && <UpdateProfileDialog/>}
+      {dialogOpen && <UpdateProfileDialog  setDialogOpen={setDialogOpen}/>}
     </div>
   );
 };
