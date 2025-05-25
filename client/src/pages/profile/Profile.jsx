@@ -114,7 +114,10 @@ const Profile = () => {
             ))
           : null}
       </div>
-      {dialogOpen && <UpdateProfileDialog  setDialogOpen={setDialogOpen}/>}
+      {dialogOpen && <UpdateProfileDialog  
+      setDialogOpen={setDialogOpen}
+      userId={userId}
+      />}
     </div>
   );
 };

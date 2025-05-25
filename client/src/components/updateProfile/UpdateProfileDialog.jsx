@@ -1,21 +1,58 @@
 import { useState } from "react";
 import "./updateProfileDialog.scss";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContent";
 
-const UpdateProfileDialog = ({ setDialogOpen }) => {
+async function updateUserprofile(userId, dataToSubmit) {
+  try {
+    const response = await axios.put(
+      `http://localhost:5000/api/user/${userId}/update`,
+      dataToSubmit,
+      {
+        withCredentials: true,
+      
+      }
+    );
+
+    if (response?.data?.success) {
+      toast.success(response.data.message);
+    }
+  } catch (error) {
+    console.error(error.message);
+    toast.error(error.response?.data?.message || error.message);
+  }
+}
+
+const UpdateProfileDialog = ({ setDialogOpen, userId }) => {
+  const { currentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    location: "",
-    coverPic: null,
-    profilePic: null,
-    profilePreview: null,
-    coverPreview: null,
+    username: currentUser?.username || "",
+    email: currentUser?.email || "",
+    location: currentUser?.location || "",
+    coverPic: currentUser?.coverPic || null,
+    profilePic: currentUser?.profilePic || null,
+    profilePreview: currentUser?.profilePic || null,
+    coverPreview: currentUser?.coverPic || null,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({ userId, dataToSubmit }) =>
+      updateUserprofile(userId,dataToSubmit),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user", userId] });
+      setDialogOpen(false);
+    },
+  });
 
   const handleImageChange = (e, type) => {
     const file = e.target.files[0];
@@ -50,6 +87,8 @@ const UpdateProfileDialog = ({ setDialogOpen }) => {
     if (formData.coverPic) {
       dataToSubmit.append("coverPic", formData.coverPic);
     }
+ 
+     mutation.mutate({ userId, dataToSubmit });
   };
 
   return (
@@ -109,7 +148,9 @@ const UpdateProfileDialog = ({ setDialogOpen }) => {
               <p>Cover Image</p>
             </label>
           </div>
-          <button>Save Changes</button>
+          <button type="submit" disabled={mutation.isPending}>
+            {mutation.isPending ? "Saving" : "Save Changes"}
+          </button>
         </form>
       </div>
     </div>

@@ -6,7 +6,7 @@ import cloudinary from "../config/cloudinary.js";
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "user_profiles",
+    folder: "social_app",
     allowed_formats: ["jpg", "png", "jpeg"],
   },
 });
