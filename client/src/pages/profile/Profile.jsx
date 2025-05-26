@@ -32,34 +32,56 @@ async function fetchPostsByUser(userId) {
   }
 }
 
+async function fetchUser(userId) {
+  const response = await axios.get(`http://localhost:5000/api/user/${userId}`, {
+    withCredentials: true,
+  });
+  return response.data.user; // adjust based on your actual response
+}
+
 const Profile = () => {
   const { userId } = useParams();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const {
     data: posts,
-    isPending,
-    isError,
-    error,
+    isPending: isPostsLoading,
+    isError: isPostsError,
+    error: postsError,
   } = useQuery({
     queryKey: ["posts", userId],
     queryFn: () => fetchPostsByUser(userId),
   });
 
-  if (isPending) return <p>Loading....</p>;
-  if (isError) return <p>{error.message}</p>;
+  const {
+    data: user,
+    isPending: isUserLoading,
+    isError: isUserError,
+    error: userError,
+  } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: () => fetchUser(userId),
+  });
+
+if (isUserLoading || isPostsLoading) {
+  return <p>Loading...</p>;
+}
+
+if (isUserError) {
+  return <p>Error loading user: {userError.message}</p>;
+}
+
+if (isPostsError) {
+  return <p>Error loading posts: {postsError.message}</p>;
+}
 
   return (
     <div className="profile">
       <div className="imageContainer">
+        <img src={user?.coverPic} alt="user-coverPic" className="cover" />
         <img
-          src="https://images.pexels.com/photos/13440765/pexels-photo-13440765.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-          alt=""
-          className="cover"
-        />
-        <img
-          src="https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"
-          alt=""
+          src={user?.profilePic}
+          alt="user-profilePic"
           className="profilePic"
         />
       </div>
@@ -83,15 +105,15 @@ const Profile = () => {
             </a>
           </div>
           <div className="center">
-            <span>Jane Doe</span>
+            <span>{user?.username}</span>
             <div className="info">
               <div className="item">
                 <PlaceIcon />
-                <span>USA</span>
+                <span>{user?.location}</span>
               </div>
               <div className="item">
                 <LanguageIcon />
-                <span>lama.dev</span>
+                <span>{user?.email}</span>
               </div>
             </div>
             <button>Follow</button>
@@ -114,10 +136,9 @@ const Profile = () => {
             ))
           : null}
       </div>
-      {dialogOpen && <UpdateProfileDialog  
-      setDialogOpen={setDialogOpen}
-      userId={userId}
-      />}
+      {dialogOpen && (
+        <UpdateProfileDialog setDialogOpen={setDialogOpen} userId={userId} />
+      )}
     </div>
   );
 };

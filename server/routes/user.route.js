@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../middlewares/verifyToken.js";
-import { updateUserprofile } from "../controllers/user.controller.js";
+import { getUser, updateUserprofile } from "../controllers/user.controller.js";
 import upload from "../middlewares/multer.js";
 
 const userRoute = express.Router();
@@ -14,5 +14,6 @@ userRoute.put(
   ]),
   updateUserprofile
 );
+userRoute.get("/:userId",getUser)
 
 export default userRoute;

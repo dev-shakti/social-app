@@ -149,7 +149,7 @@ const UpdateProfileDialog = ({ setDialogOpen, userId }) => {
             </label>
           </div>
           <button type="submit" disabled={mutation.isPending}>
-            {mutation.isPending ? "Saving" : "Save Changes"}
+            {mutation.isPending ? "Saving..." : "Save Changes"}
           </button>
         </form>
       </div>

@@ -98,7 +98,7 @@ export async function getPostsByUser(req, res) {
   try {
     const posts = await Post.find({ userId }).populate(
       "userId",
-      "username profilePic"
+      "username profilePic coverPic"
     );
     return res.status(201).json({
       success: true,
