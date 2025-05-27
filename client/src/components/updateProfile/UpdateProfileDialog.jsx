@@ -13,29 +13,30 @@ async function updateUserprofile(userId, dataToSubmit) {
       dataToSubmit,
       {
         withCredentials: true,
-      
       }
     );
 
     if (response?.data?.success) {
       toast.success(response.data.message);
     }
+
+    return response.data.user;
   } catch (error) {
     console.error(error.message);
     toast.error(error.response?.data?.message || error.message);
   }
 }
 
-const UpdateProfileDialog = ({ setDialogOpen, userId }) => {
-  const { currentUser } = useContext(AuthContext);
+const UpdateProfileDialog = ({ setDialogOpen, userId, user }) => {
+  const { setCurrentUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
-    username: currentUser?.username || "",
-    email: currentUser?.email || "",
-    location: currentUser?.location || "",
-    coverPic: currentUser?.coverPic || null,
-    profilePic: currentUser?.profilePic || null,
-    profilePreview: currentUser?.profilePic || null,
-    coverPreview: currentUser?.coverPic || null,
+    username: user?.username || "",
+    email: user?.email || "",
+    location: user?.location || "",
+    coverPic: user?.coverPic || null,
+    profilePic: user?.profilePic || null,
+    profilePreview: user?.profilePic || null,
+    coverPreview: user?.coverPic || null,
   });
 
   const handleChange = (e) => {
@@ -47,8 +48,9 @@ const UpdateProfileDialog = ({ setDialogOpen, userId }) => {
 
   const mutation = useMutation({
     mutationFn: ({ userId, dataToSubmit }) =>
-      updateUserprofile(userId,dataToSubmit),
-    onSuccess: () => {
+      updateUserprofile(userId, dataToSubmit),
+    onSuccess: (data) => {
+      setCurrentUser(data);
       queryClient.invalidateQueries({ queryKey: ["user", userId] });
       setDialogOpen(false);
     },
@@ -87,8 +89,8 @@ const UpdateProfileDialog = ({ setDialogOpen, userId }) => {
     if (formData.coverPic) {
       dataToSubmit.append("coverPic", formData.coverPic);
     }
- 
-     mutation.mutate({ userId, dataToSubmit });
+
+    mutation.mutate({ userId, dataToSubmit });
   };
 
   return (

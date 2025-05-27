@@ -14,8 +14,10 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Post from "../../components/post/Post";
 import EditIcon from "@mui/icons-material/Edit";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import UpdateProfileDialog from "../../components/updateProfile/UpdateProfileDialog";
+import { AuthContext } from "../../context/AuthContent";
+import { toast } from "react-toastify";
 
 async function fetchPostsByUser(userId) {
   try {
@@ -42,6 +44,7 @@ async function fetchUser(userId) {
 const Profile = () => {
   const { userId } = useParams();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const { currentUser } = useContext(AuthContext);
 
   const {
     data: posts,
@@ -63,17 +66,21 @@ const Profile = () => {
     queryFn: () => fetchUser(userId),
   });
 
-if (isUserLoading || isPostsLoading) {
-  return <p>Loading...</p>;
-}
+  const handleEditUser = () => {
+    setDialogOpen((prev) => !prev);
+  };
 
-if (isUserError) {
-  return <p>Error loading user: {userError.message}</p>;
-}
+  if (isUserLoading || isPostsLoading) {
+    return <p>Loading...</p>;
+  }
 
-if (isPostsError) {
-  return <p>Error loading posts: {postsError.message}</p>;
-}
+  if (isUserError) {
+    return <p>Error loading user: {userError.message}</p>;
+  }
+
+  if (isPostsError) {
+    return <p>Error loading posts: {postsError.message}</p>;
+  }
 
   return (
     <div className="profile">
@@ -120,12 +127,11 @@ if (isPostsError) {
           </div>
           <div className="right">
             <EmailOutlinedIcon />
-            <div
-              className="editContainer"
-              onClick={() => setDialogOpen((prev) => !prev)}
-            >
-              <EditIcon fontSize="small" />
-            </div>
+            {userId === currentUser._id && (
+              <div className="editContainer" onClick={handleEditUser}>
+                <EditIcon fontSize="small" />
+              </div>
+            )}
           </div>
         </div>
         {posts && posts.length > 0
@@ -137,7 +143,11 @@ if (isPostsError) {
           : null}
       </div>
       {dialogOpen && (
-        <UpdateProfileDialog setDialogOpen={setDialogOpen} userId={userId} />
+        <UpdateProfileDialog
+          setDialogOpen={setDialogOpen}
+          userId={userId}
+          user={user}
+        />
       )}
     </div>
   );

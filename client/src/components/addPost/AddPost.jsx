@@ -2,16 +2,22 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import "./addPost.scss";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../context/AuthContent";
 
-async function addPost(desc) {
+async function addPost({ desc, postImg }) {
+  const formData = new FormData();
+  formData.append("desc", desc);
+  if (postImg) {
+    formData.append("file", postImg);
+  }
   try {
     const response = await axios.post(
       `http://localhost:5000/api/posts/add`,
-      desc,
+      formData,
       {
         withCredentials: true,
       }
@@ -20,7 +26,6 @@ async function addPost(desc) {
     if (response?.data?.success) {
       toast.success(response.data.message);
     }
-
   } catch (error) {
     console.error(error.message);
     toast.error(error.response?.data?.message || error.message);
@@ -29,6 +34,9 @@ async function addPost(desc) {
 
 const AddPost = () => {
   const [desc, setDesc] = useState("");
+  const [postImg, setPostImg] = useState(null);
+  const {currentUser}=useContext(AuthContext);
+
 
   const queryClient = useQueryClient();
 
@@ -37,6 +45,7 @@ const AddPost = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       setDesc("");
+      setPostImg(null)
     },
   });
 
@@ -47,6 +56,7 @@ const AddPost = () => {
     }
     mutation.mutate({
       desc,
+      postImg,
     });
   }
 
@@ -56,7 +66,7 @@ const AddPost = () => {
       <div className="container">
         <div className="top">
           <img
-            src="https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            src={currentUser?.profilePic || "https://github.com/shadcn.png"}
             alt=""
           />
           <textarea
@@ -65,13 +75,29 @@ const AddPost = () => {
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           />
+          {postImg && (
+            <div className="preview">
+              <img
+                src={URL.createObjectURL(postImg)}
+                alt="preview"
+                width={100}
+              />
+            </div>
+          )}
         </div>
         <div className="bottom">
           <div className="icons">
-            <div className="icon">
+            <label htmlFor="postImgInput" className="icon">
               <ImageOutlinedIcon style={{ color: "#4caf50" }} />
               <span>Add image</span>
-            </div>
+            </label>
+            <input
+              type="file"
+              id="postImgInput"
+              accept="image/*"
+              onChange={(e) => setPostImg(e.target.files[0])}
+              style={{ display: "none" }}
+            />
             <div className="icon">
               <PlaceOutlinedIcon style={{ color: "#f44336" }} />
               <span>Add place</span>
@@ -81,8 +107,12 @@ const AddPost = () => {
               <span>Tag friends</span>
             </div>
           </div>
-          <button type="submit" onClick={handleAddPost}  disabled={mutation.isPending}>
-         {mutation.isPending ? "Sharing..." : "Share"}
+          <button
+            type="submit"
+            onClick={handleAddPost}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Sharing..." : "Share"}
           </button>
         </div>
       </div>

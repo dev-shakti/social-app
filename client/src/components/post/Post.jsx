@@ -33,7 +33,6 @@ async function deletePost(id) {
 }
 
 async function fetchCommentCount(postId) {
- 
   try {
     const response = await axios.get(
       `http://localhost:5000/api/comments/${postId}/count`,
@@ -52,7 +51,7 @@ const Post = ({ post }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const { currentUser } = useContext(AuthContext);
-  const [isLiked,setIsLiked]=useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -63,8 +62,7 @@ const Post = ({ post }) => {
     },
   });
 
-
-   const { data} = useQuery({
+  const { data } = useQuery({
     queryKey: ["commentCount", post._id],
     queryFn: () => fetchCommentCount(post._id),
   });
@@ -107,30 +105,28 @@ const Post = ({ post }) => {
 
         <div className="content">
           <p>{post.desc}</p>
-          <img
-            src={
-              post.img ||
-              "https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            }
-            alt=""
-          />
+          <img src={post?.postImg} alt="post-image" />
         </div>
 
         <div className="interactions">
-          <LikeButton isLiked={isLiked} postId={post._id} setIsLiked={setIsLiked}/>
+          <LikeButton
+            isLiked={isLiked}
+            postId={post._id}
+            setIsLiked={setIsLiked}
+          />
           <div
             className="item"
             onClick={() => setIsCommentOpen((prev) => !prev)}
           >
             <TextsmsOutlinedIcon fontSize="small" />
-           {data?.count} Comments
+            {data?.count} Comments
           </div>
           <div className="item">
             <ShareOutlinedIcon fontSize="small" />
             Share
           </div>
         </div>
-        {isCommentOpen && <Comments postId={post._id}/>}
+        {isCommentOpen && <Comments postId={post._id} />}
       </div>
     </div>
   );

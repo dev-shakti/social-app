@@ -15,6 +15,10 @@ export async function addPost(req, res) {
       desc,
       userId: req.userId,
     });
+    
+   if (req.file) {
+      newPost.postImg = req.file.path;
+    }
 
     await newPost.save();
 
