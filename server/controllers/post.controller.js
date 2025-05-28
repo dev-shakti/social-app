@@ -15,8 +15,8 @@ export async function addPost(req, res) {
       desc,
       userId: req.userId,
     });
-    
-   if (req.file) {
+
+    if (req.file) {
       newPost.postImg = req.file.path;
     }
 
@@ -38,7 +38,9 @@ export async function addPost(req, res) {
 
 export async function getPosts(req, res) {
   try {
-    const posts = await Post.find({}).populate("userId", "username profilePic");
+    const posts = await Post.find({})
+      .sort({ createdAt: -1 })
+      .populate("userId", "username profilePic");
     return res.status(201).json({
       success: true,
       posts,
@@ -100,10 +102,9 @@ export async function deletePosts(req, res) {
 export async function getPostsByUser(req, res) {
   const { userId } = req.params;
   try {
-    const posts = await Post.find({ userId }).populate(
-      "userId",
-      "username profilePic coverPic"
-    );
+    const posts = await Post.find({ userId })
+      .sort({ createdAt: -1 })
+      .populate("userId", "username profilePic coverPic");
     return res.status(201).json({
       success: true,
       posts,

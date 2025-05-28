@@ -40,7 +40,6 @@ const Navbar = () => {
     }
   }
 
-  console.log(currentUser);
   return (
     <header className="header">
       <div className="left">

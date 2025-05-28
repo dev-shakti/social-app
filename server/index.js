@@ -8,6 +8,7 @@ import postRoute from "./routes/post.route.js";
 import commentRoute from "./routes/comment.route.js";
 import likeRoute from "./routes/like.route.js";
 import userRoute from "./routes/user.route.js";
+import storyRoute from "./routes/stories.route.js";
 dotenv.config();
 
 //initialize app
@@ -33,6 +34,8 @@ app.use("/api/user",userRoute);
 app.use("/api/posts",postRoute);
 app.use("/api/comments",commentRoute);
 app.use("/api/likes",likeRoute);
+app.use("/api/stories",storyRoute);
+
 
 //connect to db
 mongoose

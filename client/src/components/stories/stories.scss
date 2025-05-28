@@ -1,5 +1,8 @@
+@import "../../styles.scss";
+
 .stories {
-  display: flex;
+    @include themify($themes) {
+      display: flex;
   gap: 10px;
   height: 250px;
 
@@ -57,4 +60,27 @@
       cursor: pointer;
     }
   }
+
+  .preview {
+       border-radius: 10px;
+    overflow: hidden;
+     img{
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+     }
+    .upload-btn {
+      border: none;
+      outline: none;
+      padding: 10px;
+      background-color: themed("blueColor");
+      color: #fff;
+      cursor: pointer;
+      border-radius: 5px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+  }
+    }
+  
 }
