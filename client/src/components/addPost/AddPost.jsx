@@ -2,26 +2,35 @@ import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import "./addPost.scss";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/AuthContent";
 
-async function addPost({ desc, postImg }) {
-  const formData = new FormData();
-  formData.append("desc", desc);
-  if (postImg) {
-    formData.append("file", postImg);
+async function addOrEditPost({ desc, postImg, editedPostId }) {
+  let formData;
+  if (editedPostId === null) {
+    formData = new FormData();
+    formData.append("desc", desc);
+    if (postImg) {
+      formData.append("file", postImg);
+    }
   }
+
   try {
-    const response = await axios.post(
-      `http://localhost:5000/api/posts/add`,
-      formData,
-      {
-        withCredentials: true,
-      }
-    );
+    const response =
+      editedPostId !== null
+        ? await axios.put(
+            `http://localhost:5000/api/posts/${editedPostId}/edit`,
+            { desc },
+            {
+              withCredentials: true,
+            }
+          )
+        : await axios.post(`http://localhost:5000/api/posts/add`, formData, {
+            withCredentials: true,
+          });
 
     if (response?.data?.success) {
       toast.success(response.data.message);
@@ -32,20 +41,26 @@ async function addPost({ desc, postImg }) {
   }
 }
 
-const AddPost = () => {
-  const [desc, setDesc] = useState("");
-  const [postImg, setPostImg] = useState(null);
-  const {currentUser}=useContext(AuthContext);
-
+const AddPost = ({
+  desc,
+  setDesc,
+  postImg,
+  setPostImg,
+  editedPostId,
+  setEditedPostId,
+}) => {
+  const { currentUser } = useContext(AuthContext);
 
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: addPost,
+    mutationFn: ({ desc, postImg, editedPostId }) =>
+      addOrEditPost({ desc, postImg, editedPostId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       setDesc("");
-      setPostImg(null)
+      setPostImg(null);
+      if (editedPostId) setEditedPostId(null);
     },
   });
 
@@ -57,9 +72,17 @@ const AddPost = () => {
     mutation.mutate({
       desc,
       postImg,
+      editedPostId,
     });
   }
 
+  async function handleEditPost() {
+    mutation.mutate({
+      desc,
+      postImg,
+      editedPostId,
+    });
+  }
 
   return (
     <div className="addPost">
@@ -107,13 +130,23 @@ const AddPost = () => {
               <span>Tag friends</span>
             </div>
           </div>
-          <button
-            type="submit"
-            onClick={handleAddPost}
-            disabled={mutation.isPending}
-          >
-            {mutation.isPending ? "Sharing..." : "Share"}
-          </button>
+          {editedPostId ? (
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              onClick={handleEditPost}
+            >
+              {mutation.isPending ? "Saving..." : "Save change"}
+            </button>
+          ) : (
+            <button
+              type="submit"
+              onClick={handleAddPost}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Sharing..." : "Share"}
+            </button>
+          )}
         </div>
       </div>
     </div>

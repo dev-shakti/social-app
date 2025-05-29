@@ -49,6 +49,9 @@ export async function updateUserprofile(req, res) {
   }
 }
 
+
+
+
 export async function getUser(req,res){
   const {userId}=req.params;
   try {

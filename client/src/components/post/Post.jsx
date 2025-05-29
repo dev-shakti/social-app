@@ -47,7 +47,7 @@ async function fetchCommentCount(postId) {
   }
 }
 
-const Post = ({ post }) => {
+const Post = ({ post, setDesc, setPostImg, setEditedPostId }) => {
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [showActions, setShowActions] = useState(false);
   const { currentUser } = useContext(AuthContext);
@@ -66,6 +66,13 @@ const Post = ({ post }) => {
     queryKey: ["commentCount", post._id],
     queryFn: () => fetchCommentCount(post._id),
   });
+
+  function handleEditPost(currentPost) {
+    if (currentPost) {
+      setEditedPostId(currentPost._id);
+      setDesc(currentPost.desc);
+    }
+  }
 
   return (
     <div className="post">
@@ -89,7 +96,7 @@ const Post = ({ post }) => {
               <MoreHorizIcon onClick={() => setShowActions((prev) => !prev)} />
               {showActions && (
                 <div className="btn-group">
-                  <button>
+                  <button onClick={() => handleEditPost(post)}>
                     <EditIcon fontSize="small" />
                     Edit
                   </button>

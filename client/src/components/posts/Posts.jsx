@@ -3,7 +3,7 @@ import AddPost from "../addPost/AddPost";
 import Post from "../post/Post";
 import "./posts.scss";
 import { useQuery } from "@tanstack/react-query";
-
+import { useState } from "react";
 
 async function fetchPosts() {
   try {
@@ -17,6 +17,10 @@ async function fetchPosts() {
   }
 }
 const Posts = () => {
+  const [desc, setDesc] = useState("");
+  const [postImg, setPostImg] = useState(null);
+   const [editedPostId,setEditedPostId]=useState(null);
+
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
@@ -27,9 +31,24 @@ const Posts = () => {
 
   return (
     <div className="posts">
-      <AddPost />
+      <AddPost
+        desc={desc}
+        setDesc={setDesc}
+        postImg={postImg}
+        setPostImg={setPostImg}
+        editedPostId={editedPostId}
+        setEditedPostId={setEditedPostId}
+      />
       {data && data.posts && data.posts.length > 0
-        ? data.posts.map((post) => <Post key={post._id} post={post} />)
+        ? data.posts.map((post) => (
+            <Post
+              key={post._id}
+              post={post}
+              setDesc={setDesc}
+              setPostImg={setPostImg}
+              setEditedPostId={setEditedPostId}
+            />
+          ))
         : null}
     </div>
   );

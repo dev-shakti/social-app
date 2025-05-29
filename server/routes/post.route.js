@@ -16,7 +16,7 @@ const postRoute = express.Router();
 postRoute.post("/add", verifyToken, upload.single("file"), addPost);
 postRoute.get("/get", getPosts);
 postRoute.get("/:userId/get", getPostsByUser);
-postRoute.put("/:id/edit", verifyToken, editPost);
+postRoute.put("/:postId/edit", verifyToken, editPost);
 postRoute.delete("/:id/delete", verifyToken, deletePosts);
 
 export default postRoute;

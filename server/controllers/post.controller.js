@@ -41,7 +41,7 @@ export async function getPosts(req, res) {
     const posts = await Post.find({})
       .sort({ createdAt: -1 })
       .populate("userId", "username profilePic");
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       posts,
     });
@@ -55,7 +55,25 @@ export async function getPosts(req, res) {
 }
 
 export async function editPost(req, res) {
+  const { postId } = req.params;
+  const {desc} = req.body;
+
   try {
+    const updatedPost = await Post.findByIdAndUpdate(postId, {desc}, {
+      new: true,
+    });
+    if (!updatedPost) {
+      return res.status(404).json({
+        success: false,
+        message: "Post not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Post updated successfully",
+      post: updatedPost,
+    });
   } catch (error) {
     console.error("error while updating post", error);
     return res.status(500).json({
@@ -105,7 +123,7 @@ export async function getPostsByUser(req, res) {
     const posts = await Post.find({ userId })
       .sort({ createdAt: -1 })
       .populate("userId", "username profilePic coverPic");
-    return res.status(201).json({
+    return res.status(200).json({
       success: true,
       posts,
     });
