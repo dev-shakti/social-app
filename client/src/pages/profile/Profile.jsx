@@ -17,7 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useContext, useState } from "react";
 import UpdateProfileDialog from "../../components/updateProfile/UpdateProfileDialog";
 import { AuthContext } from "../../context/AuthContent";
-import { toast } from "react-toastify";
+import FollowButton from "./FollowButton";
 
 async function fetchPostsByUser(userId) {
   try {
@@ -82,6 +82,8 @@ const Profile = () => {
     return <p>Error loading posts: {postsError.message}</p>;
   }
 
+
+
   return (
     <div className="profile">
       <div className="imageContainer">
@@ -123,7 +125,13 @@ const Profile = () => {
                 <span>{user?.email}</span>
               </div>
             </div>
-            <button>Follow</button>
+            <p>
+              {" "}
+              {user.followerCount} followers · {user.followingCount} followings
+            </p>
+            {userId !== currentUser._id && (
+              <FollowButton userId={user._id} isFollowing={user.isFollowing} />
+            )}
           </div>
           <div className="right">
             <EmailOutlinedIcon />
