@@ -22,13 +22,13 @@ async function addOrEditPost({ desc, postImg, editedPostId }) {
     const response =
       editedPostId !== null
         ? await axios.put(
-            `http://localhost:5000/api/posts/${editedPostId}/edit`,
+            `${import.meta.env.VITE_API_URL}/posts/${editedPostId}/edit`,
             { desc },
             {
               withCredentials: true,
             }
           )
-        : await axios.post(`http://localhost:5000/api/posts/add`, formData, {
+        : await axios.post(`${import.meta.env.VITE_API_URL}/posts/add`, formData, {
             withCredentials: true,
           });
 

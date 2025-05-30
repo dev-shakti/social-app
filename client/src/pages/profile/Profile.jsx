@@ -22,7 +22,7 @@ import FollowButton from "./FollowButton";
 async function fetchPostsByUser(userId) {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/posts/${userId}/get`,
+      `${import.meta.env.VITE_API_URL}/posts/${userId}/get`,
       {
         withCredentials: true,
       }
@@ -35,7 +35,7 @@ async function fetchPostsByUser(userId) {
 }
 
 async function fetchUser(userId) {
-  const response = await axios.get(`http://localhost:5000/api/user/${userId}`, {
+  const response = await axios.get(`${import.meta.env.VITE_API_URL}/user/${userId}`, {
     withCredentials: true,
   });
   return response.data.user; // adjust based on your actual response

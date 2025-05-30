@@ -13,7 +13,7 @@ async function addStory(storyImg) {
 
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/stories/add`,
+      `${import.meta.env.VITE_API_URL}/stories/add`,
       formData,
       {
         withCredentials: true,

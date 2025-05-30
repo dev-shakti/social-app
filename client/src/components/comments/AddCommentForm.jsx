@@ -8,7 +8,7 @@ import { AuthContext } from "../../context/AuthContent";
 async function addComment({ desc, userId, postId }) {
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/comments/${postId}/${userId}/add`,
+      `${import.meta.env.VITE_API_URL}/comments/${postId}/${userId}/add`,
       { desc },
       {
         withCredentials: true,

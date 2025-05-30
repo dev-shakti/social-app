@@ -9,7 +9,7 @@ import { AuthContext } from "../../context/AuthContent";
 async function toggleLike({ userId, postId }) {
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/likes/${postId}/${userId}`,
+      `${import.meta.env.VITE_API_URL}/likes/${postId}/${userId}`,
       {},
       {
         withCredentials: true,

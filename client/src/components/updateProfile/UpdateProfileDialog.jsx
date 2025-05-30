@@ -9,7 +9,7 @@ import { AuthContext } from "../../context/AuthContent";
 async function updateUserprofile(userId, dataToSubmit) {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/user/${userId}/update`,
+      `${import.meta.env.VITE_API_URL}/user/${userId}/update`,
       dataToSubmit,
       {
         withCredentials: true,

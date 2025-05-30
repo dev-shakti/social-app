@@ -7,7 +7,7 @@ import { useState } from "react";
 
 async function fetchPosts() {
   try {
-    const response = await axios.get(`http://localhost:5000/api/posts/get`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/posts/get`, {
       withCredentials: true,
     });
 

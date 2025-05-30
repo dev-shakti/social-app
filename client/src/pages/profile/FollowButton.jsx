@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 async function followUser(userId) {
   try {
     const response = await axios.post(
-      `http://localhost:5000/api/user/follow/${userId}`,
+      `${import.meta.env.VITE_API_URL}/user/follow/${userId}`,
       {},
       {
         withCredentials: true,

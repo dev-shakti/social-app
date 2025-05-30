@@ -4,7 +4,7 @@ import axios from "axios";
 
 async function fetchStories() {
   try {
-    const response = await axios.get(`http://localhost:5000/api/stories/get`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/stories/get`, {
       withCredentials: true,
     });
 

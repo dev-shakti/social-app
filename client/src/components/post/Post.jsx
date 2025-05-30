@@ -16,7 +16,7 @@ import LikeButton from "../likeButton/LikeButton";
 async function deletePost(id) {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/posts/${id}/delete`,
+      `${import.meta.env.VITE_API_URL}/posts/${id}/delete`,
       {
         withCredentials: true,
       }
@@ -35,7 +35,7 @@ async function deletePost(id) {
 async function fetchCommentCount(postId) {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/comments/${postId}/count`,
+      `${import.meta.env.VITE_API_URL}/comments/${postId}/count`,
       {
         withCredentials: true,
       }

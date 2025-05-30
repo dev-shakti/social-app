@@ -8,7 +8,7 @@ async function fetchComments({ queryKey }) {
   const [, postId] = queryKey;
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/comments/${postId}/get`,
+      `${import.meta.env.VITE_API_URL}/comments/${postId}/get`,
       {
         withCredentials: true,
       }

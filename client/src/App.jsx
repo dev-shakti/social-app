@@ -19,6 +19,7 @@ const ProtectedRoutes = ({ children }) => {
   return children;
 };
 
+console.log(import.meta.env.VITE_API_URL)
 const App = () => {
   return (
     <Routes>
