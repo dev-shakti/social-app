@@ -43,7 +43,7 @@ const LikeButton = ({ isLiked, postId,setIsLiked }) => {
     }}
     >
       {isLiked ? (
-        <FavoriteOutlinedIcon fontSize="small" />
+        <FavoriteOutlinedIcon fontSize="small" color="error" />
       ) : (
         <FavoriteBorderOutlinedIcon fontSize="small" />
       )}{" "}

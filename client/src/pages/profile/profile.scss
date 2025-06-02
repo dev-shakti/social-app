@@ -8,12 +8,13 @@
       width: 100%;
       height: 300px;
       position: relative;
-
+      
       .cover {
         width: 100%;
         height: 100%;
         border-radius: 10px;
         object-fit: cover;
+
       }
 
       .profilePic {
@@ -26,11 +27,20 @@
         right: 0;
         margin: auto;
         top: 200px;
+
       }
     }
 
     .profileContainer {
       padding: 20px 70px;
+
+      @include mobile {
+        padding: 10px;
+      }
+
+      @include tablet {
+        padding: 20px;
+      }
 
       .profileInfo {
         height: 180px;
@@ -44,6 +54,15 @@
         align-items: center;
         background-color: themed("bg");
         color: themed("textColor");
+
+        @include mobile {
+          flex-direction: column;
+          height: 30vh;
+          padding: 20px;
+          margin-top: 100px;
+          height: auto;
+          gap: 20px;
+        }
 
         .left {
           display: flex;
@@ -97,7 +116,7 @@
           align-items: center;
           gap: 10px;
 
-          .editContainer{
+          .editContainer {
             padding: 5px;
             background-color: themed("bg");
             color: themed("textColorSoft");
@@ -109,7 +128,7 @@
             align-items: center;
             cursor: pointer;
 
-            &:hover{
+            &:hover {
               background-color: themed("bgSoft");
             }
           }

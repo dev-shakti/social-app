@@ -1,6 +1,4 @@
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
-import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import "./addPost.scss";
 import { useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -121,14 +119,6 @@ const AddPost = ({
               onChange={(e) => setPostImg(e.target.files[0])}
               style={{ display: "none" }}
             />
-            <div className="icon">
-              <PlaceOutlinedIcon style={{ color: "#f44336" }} />
-              <span>Add place</span>
-            </div>
-            <div className="icon">
-              <PersonAddOutlinedIcon style={{ color: "#3f51b5" }} />
-              <span>Tag friends</span>
-            </div>
           </div>
           {editedPostId ? (
             <button

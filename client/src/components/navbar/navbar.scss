@@ -40,6 +40,14 @@
         border: 1px solid themed("border");
         width: 700px;
 
+        @include mobile {
+          display: none;
+        }
+
+        @include tablet {
+          width: 350px;
+        }
+
         input {
           flex: 1;
           outline: none;
@@ -70,12 +78,21 @@
         display: flex;
         align-items: center;
         gap: 10px;
+
+         @include tablet {
+          display: none;
+        }
+
       }
 
       .user {
         display: flex;
         align-items: center;
         gap: 5px;
+
+          @include mobile {
+          display: none;
+        }
 
         img {
           width: 30px;
