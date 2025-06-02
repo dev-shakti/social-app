@@ -25,7 +25,7 @@ async function deletePost(id) {
     if (response?.data?.success) {
       toast.success(response.data.message);
     }
-    console.log(response.data);
+
   } catch (error) {
     console.error(error.message);
     toast.error(error.response?.data?.message || error.message);
