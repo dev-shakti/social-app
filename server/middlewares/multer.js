@@ -1,13 +1,12 @@
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../config/cloudinary.js";
-
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "social_app",
-    allowed_formats: ["jpg", "png", "jpeg","webp"],
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
   },
 });
 

@@ -1,4 +1,7 @@
+
 import Post from "../models/post.model.js";
+
+
 
 export async function addPost(req, res) {
   const { desc } = req.body;
