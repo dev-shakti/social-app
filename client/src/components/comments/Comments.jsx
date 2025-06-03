@@ -1,6 +1,6 @@
 import axios from "axios";
 import AddCommentForm from "./AddCommentForm";
-import "./comments.scss";
+import "./Comments.scss";
 import { useQuery } from "@tanstack/react-query";
 import Comment from "./Comment";
 
