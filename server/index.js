@@ -17,16 +17,29 @@ const app = express();
 //loading env variables
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  process.env.CLIENT_URL, // dev
+  "https://social-app-6cl3.vercel.app" // prod
+];
+
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback){
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "DELETE", "PUT"],
     credentials: true,
   })
 );
+
+app.options("*", cors());
 
 //routes
 app.use("/api/auth",authRoute);
