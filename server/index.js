@@ -14,29 +14,15 @@ dotenv.config();
 //initialize app
 const app = express();
 
-const allowedOrigins = [
-  process.env.CLIENT_URL, // dev
-  "https://social-app-6cl3.vercel.app", // prod
-];
-
 //middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
-
-app.options("*", cors());
 
 //routes
 app.use("/api/auth", authRoute);
@@ -52,14 +38,12 @@ mongoose
   .then(() => console.log("mongodb connected successfully"))
   .catch((err) => console.log(err));
 
-if (process.env.NODE_ENV !== "production") {
-  //loading env variables
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server running locally on http://localhost:${PORT}`);
-  });
-}
+//loading env variables
+const PORT = process.env.PORT || 3000;
 
-export default app;
+//listening to app
+app.listen(PORT, () => {
+  console.log(`Server running locally on http://localhost:${PORT}`);
+});
 
 
