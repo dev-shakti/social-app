@@ -14,12 +14,9 @@ dotenv.config();
 //initialize app
 const app = express();
 
-//loading env variables
-const PORT = process.env.PORT || 3000;
-
 const allowedOrigins = [
   process.env.CLIENT_URL, // dev
-  "https://social-app-6cl3.vercel.app" // prod
+  "https://social-app-6cl3.vercel.app", // prod
 ];
 
 //middlewares
@@ -27,7 +24,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: function (origin, callback){
+    origin: function (origin, callback) {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -42,23 +39,27 @@ app.use(
 app.options("*", cors());
 
 //routes
-app.use("/api/auth",authRoute);
-app.use("/api/user",userRoute);
-app.use("/api/posts",postRoute);
-app.use("/api/comments",commentRoute);
-app.use("/api/likes",likeRoute);
-app.use("/api/stories",storyRoute);
-
+app.use("/api/auth", authRoute);
+app.use("/api/user", userRoute);
+app.use("/api/posts", postRoute);
+app.use("/api/comments", commentRoute);
+app.use("/api/likes", likeRoute);
+app.use("/api/stories", storyRoute);
 
 //connect to db
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("mongodb connected successfully");
-
-    //listening to app
-    app.listen(PORT, () => {
-      console.log(`app is listening to port:${PORT}`);
-    });
-  })
+  .then(() => console.log("mongodb connected successfully"))
   .catch((err) => console.log(err));
+
+if (process.env.NODE_ENV !== "production") {
+  //loading env variables
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running locally on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
+
+
